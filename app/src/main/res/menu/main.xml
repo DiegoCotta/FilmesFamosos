@@ -6,16 +6,16 @@
     <item
         android:id="@+id/action_refresh"
         android:orderInCategory="1"
-        android:title="Refresh"
+        android:title="@string/refresh"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_most_popular"
         android:orderInCategory="2"
-        android:title="Most Popular"
+        android:title="@string/most_popular"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_top_rating"
         android:orderInCategory="3"
-        android:title="Top Rating"
+        android:title="@string/top_rating"
         app:showAsAction="never" />
 </menu>

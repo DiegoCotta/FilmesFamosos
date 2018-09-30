@@ -4,27 +4,37 @@ import android.graphics.Bitmap;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by diegocotta on 28/09/2018.
  */
 
-class Movie {
+class Movie implements Serializable {
 
     @SerializedName("id")
+    private
     int id;
     @SerializedName("voteAverage")
+    private
     float voteAverage;
     @SerializedName("title")
+    private
     String title;
     @SerializedName("popularity")
+    private
     int popularity;
     @SerializedName("posterPath")
+    private
     String posterPath;
     @SerializedName("imgPoster")
+    private
     Bitmap imgPoster;
     @SerializedName("overview")
+    private
     String overview;
     @SerializedName("release_date")
+    private
     String release_date;
 
     public int getId() {

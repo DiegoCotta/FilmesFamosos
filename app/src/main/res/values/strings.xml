@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Filmes Famosos</string>
+    <string name="api_key">4137aea4de5d86caffbc2238f3c2a31c</string>
+    <string name="base_image_url">http://image.tmdb.org/t/p/w185</string>
+    <string name="service_error">Error on load Movies</string>
+    <string name="resume">Resume</string>
+    <string name="rating">Rating:</string>
+    <string name="refresh">Refresh</string>
+    <string name="most_popular">Most Popular</string>
+    <string name="top_rating">Top Rating</string>
+    <string name="poster_image">Poster Image</string>
+    <string name="star">Star</string>
 </resources>
