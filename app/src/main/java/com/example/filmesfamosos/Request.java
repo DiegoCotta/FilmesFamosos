@@ -7,5 +7,5 @@ package com.example.filmesfamosos;
 public enum Request {
 
     mostPopular,
-    topRated;
+    topRated
 }

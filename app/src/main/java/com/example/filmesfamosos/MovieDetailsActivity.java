@@ -40,9 +40,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
             //reference https://stackoverflow.com/questions/39445002/get-date-month-and-year-from-particular-date
             try {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                Date d = null;
-
-                d = sdf.parse(movie.getRelease_date());
+                Date d = sdf.parse(movie.getRelease_date());
 
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(d);

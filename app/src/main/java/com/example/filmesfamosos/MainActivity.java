@@ -9,7 +9,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import retrofit2.Call;
@@ -18,7 +17,6 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements PosterAdapter.PosterAdapterListener {
 
-    private RecyclerView rvMoviesPoster;
     private PosterAdapter posterAdapter;
     private FrameLayout progressBar;
     private int numPages;
@@ -30,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements PosterAdapter.Pos
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        rvMoviesPoster = (RecyclerView) findViewById(R.id.rv_movies_poster);
+        RecyclerView rvMoviesPoster = (RecyclerView) findViewById(R.id.rv_movies_poster);
         progressBar = (FrameLayout) findViewById(R.id.progressBar);
         posterAdapter = new PosterAdapter(MainActivity.this);
 
