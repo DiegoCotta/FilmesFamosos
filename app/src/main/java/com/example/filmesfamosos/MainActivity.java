@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -19,7 +20,7 @@ public class MainActivity extends AppCompatActivity implements PosterAdapter.Pos
 
     private RecyclerView rvMoviesPoster;
     private PosterAdapter posterAdapter;
-    private ProgressBar progressBar;
+    private FrameLayout progressBar;
     private int numPages;
     private Request lastRequest;
     private Service service;
@@ -30,10 +31,13 @@ public class MainActivity extends AppCompatActivity implements PosterAdapter.Pos
         setContentView(R.layout.activity_main);
 
         rvMoviesPoster = (RecyclerView) findViewById(R.id.rv_movies_poster);
+        progressBar = (FrameLayout) findViewById(R.id.progressBar);
         posterAdapter = new PosterAdapter(MainActivity.this);
+
         GridLayoutManager manager = new GridLayoutManager(this, 2);
         rvMoviesPoster.setLayoutManager(manager);
         rvMoviesPoster.setHasFixedSize(true);
+        rvMoviesPoster.setAdapter(posterAdapter);
         service = Service.retrofit.create(Service.class);
         numPages = 1;
         callMostPopular(numPages);
@@ -51,10 +55,7 @@ public class MainActivity extends AppCompatActivity implements PosterAdapter.Pos
         int menuItemThatWasSelected = item.getItemId();
         switch (menuItemThatWasSelected) {
             case R.id.action_most_popular:
-                if (lastRequest == Request.mostPopular)
-                    numPages++;
-                else
-                    numPages = 1;
+
                 callMostPopular(numPages);
                 break;
             case R.id.action_refresh:
@@ -64,10 +65,7 @@ public class MainActivity extends AppCompatActivity implements PosterAdapter.Pos
                     callMostRated(numPages);
                 break;
             case R.id.action_top_rating:
-                if (lastRequest == Request.topRated)
-                    numPages++;
-                else
-                    numPages = 1;
+
                 callMostRated(numPages);
                 break;
         }
@@ -82,8 +80,8 @@ public class MainActivity extends AppCompatActivity implements PosterAdapter.Pos
             @Override
             public void onResponse(Call<ServiceResult> call, Response<ServiceResult> response) {
                 hideProgressBar();
-                if(response != null && response.body() != null)
-                posterAdapter.setMovies(response.body().getMovies());
+                if (response != null && response.body() != null)
+                    posterAdapter.setMovies(response.body().getMovies());
             }
 
             @Override
@@ -101,8 +99,8 @@ public class MainActivity extends AppCompatActivity implements PosterAdapter.Pos
             @Override
             public void onResponse(Call<ServiceResult> call, Response<ServiceResult> response) {
                 hideProgressBar();
-                if(response != null && response.body() != null)
-                posterAdapter.setMovies(response.body().getMovies());
+                if (response != null && response.body() != null)
+                    posterAdapter.setMovies(response.body().getMovies());
             }
 
             @Override
@@ -113,26 +111,18 @@ public class MainActivity extends AppCompatActivity implements PosterAdapter.Pos
         });
     }
 
-    private void showProgressBar(){
+    private void showProgressBar() {
         progressBar.setVisibility(View.VISIBLE);
     }
 
-    private void hideProgressBar(){
+    private void hideProgressBar() {
         progressBar.setVisibility(View.INVISIBLE);
-}
+    }
 
     @Override
     public void onClick(Movie movie) {
         Intent intent = new Intent(this, MovieDetailsActivity.class);
         intent.putExtra(MovieDetailsActivity.MOVIE_KEY, movie);
         startActivity(intent);
-    }
-
-    @Override
-    public void loadMore() {
-        if (lastRequest == Request.mostPopular)
-            callMostPopular(++numPages);
-        else
-            callMostRated(++numPages);
     }
 }

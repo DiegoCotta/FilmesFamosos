@@ -12,10 +12,10 @@ import retrofit2.http.Query;
 //Reference https://zeroturnaround.com/rebellabs/getting-started-with-retrofit-2/
 interface Service {
 
-    @GET("/movie/popular")
+    @GET("movie/popular")
     Call<ServiceResult> callMostPopular(@Query("api_key") String key, @Query("page") int page);
 
-    @GET("/movie/top_rated")
+    @GET("movie/top_rated")
     Call<ServiceResult> callMostRated(@Query("api_key") String key, @Query("page") int page);
 
     Retrofit retrofit = new Retrofit.Builder()

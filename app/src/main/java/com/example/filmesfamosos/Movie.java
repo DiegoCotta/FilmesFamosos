@@ -15,7 +15,7 @@ class Movie implements Serializable {
     @SerializedName("id")
     private
     int id;
-    @SerializedName("voteAverage")
+    @SerializedName("vote_average")
     private
     float voteAverage;
     @SerializedName("title")
@@ -23,8 +23,8 @@ class Movie implements Serializable {
     String title;
     @SerializedName("popularity")
     private
-    int popularity;
-    @SerializedName("posterPath")
+    String popularity;
+    @SerializedName("poster_path")
     private
     String posterPath;
     @SerializedName("imgPoster")
@@ -61,11 +61,11 @@ class Movie implements Serializable {
         this.title = title;
     }
 
-    public int getPopularity() {
+    public String getPopularity() {
         return popularity;
     }
 
-    public void setPopularity(int popularity) {
+    public void setPopularity(String popularity) {
         this.popularity = popularity;
     }
 

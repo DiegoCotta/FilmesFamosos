@@ -65,8 +65,6 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterView
 
     public interface PosterAdapterListener {
         void onClick(Movie movie);
-
-        void loadMore();
     }
 
     public class PosterViewHolder extends RecyclerView.ViewHolder {

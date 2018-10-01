@@ -8,6 +8,11 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 public class MovieDetailsActivity extends AppCompatActivity {
 
     public static final String MOVIE_KEY = "movie_key";
@@ -28,9 +33,23 @@ public class MovieDetailsActivity extends AppCompatActivity {
             Movie movie = (Movie) intent.getSerializableExtra(MOVIE_KEY);
             Picasso.get().load(getString(R.string.base_image_url) + movie.getPosterPath()).into(ivPoster);
             tvTitle.setText(movie.getTitle());
-            tvReleaseDate.setText(movie.getRelease_date());
+
             tvResume.setText(movie.getOverview());
             tvRating.setText(String.valueOf(movie.getVoteAverage()));
+
+            //reference https://stackoverflow.com/questions/39445002/get-date-month-and-year-from-particular-date
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date d = null;
+
+                d = sdf.parse(movie.getRelease_date());
+
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(d);
+                tvReleaseDate.setText(String.format("%d", cal.get(Calendar.YEAR)));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

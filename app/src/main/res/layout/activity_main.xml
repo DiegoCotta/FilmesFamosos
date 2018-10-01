@@ -20,7 +20,6 @@
         <ProgressBar
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:layout_gravity="center"
-             />
+            android:layout_gravity="center" />
     </FrameLayout>
 </merge>
