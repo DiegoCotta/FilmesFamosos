@@ -1,5 +1,6 @@
-package com.example.filmesfamosos;
+package com.example.filmesfamosos.service;
 
+import com.example.filmesfamosos.model.Movie;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;

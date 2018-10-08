@@ -1,6 +1,8 @@
-package com.example.filmesfamosos;
+package com.example.filmesfamosos.model;
 
 import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -10,7 +12,7 @@ import java.io.Serializable;
  * Created by diegocotta on 28/09/2018.
  */
 
-class Movie implements Serializable {
+public class Movie implements Parcelable {
 
     @SerializedName("id")
     private
@@ -36,6 +38,7 @@ class Movie implements Serializable {
     @SerializedName("release_date")
     private
     String release_date;
+
 
     public int getId() {
         return id;
@@ -100,4 +103,44 @@ class Movie implements Serializable {
     public void setRelease_date(String release_date) {
         this.release_date = release_date;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeFloat(voteAverage);
+        parcel.writeString(title);
+        parcel.writeString(popularity);
+        parcel.writeString(posterPath);
+        parcel.writeParcelable(imgPoster, i);
+        parcel.writeString(overview);
+        parcel.writeString(release_date);
+    }
+
+    protected Movie(Parcel in) {
+        id = in.readInt();
+        voteAverage = in.readFloat();
+        title = in.readString();
+        popularity = in.readString();
+        posterPath = in.readString();
+        imgPoster = in.readParcelable(Bitmap.class.getClassLoader());
+        overview = in.readString();
+        release_date = in.readString();
+    }
+
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
 }

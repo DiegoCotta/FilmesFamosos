@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">Filmes Famosos</string>
-    <string name="api_key">{api_key}</string>
-    <string name="base_image_url">http://image.tmdb.org/t/p/w185</string>
+
     <string name="service_error">Error on load Movies</string>
     <string name="resume">Resume</string>
     <string name="rating">Rating:</string>
@@ -10,4 +9,7 @@
     <string name="top_rating">Top Rating</string>
     <string name="poster_image">Poster Image</string>
     <string name="star">Star</string>
+    <string name="favorites">Favorites</string>
+    <string name="no_internet">There is no internet connection.</string>
+    <string name="all_movies_load">All the films were loaded.</string>
 </resources>

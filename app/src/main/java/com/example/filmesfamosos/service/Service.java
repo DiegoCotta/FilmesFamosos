@@ -1,4 +1,6 @@
-package com.example.filmesfamosos;
+package com.example.filmesfamosos.service;
+
+import com.example.filmesfamosos.BuildConfig;
 
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -10,7 +12,8 @@ import retrofit2.http.Query;
  * Created by diegocotta on 30/09/2018.
  */
 //Reference https://zeroturnaround.com/rebellabs/getting-started-with-retrofit-2/
-interface Service {
+public interface Service {
+
 
     @GET("movie/popular")
     Call<ServiceResult> callMostPopular(@Query("api_key") String key, @Query("page") int page);
@@ -19,7 +22,10 @@ interface Service {
     Call<ServiceResult> callMostRated(@Query("api_key") String key, @Query("page") int page);
 
     Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("https://api.themoviedb.org/3/")
+            .baseUrl(BuildConfig.SERVICE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build();
+
+
 }
+
