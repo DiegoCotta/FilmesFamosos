@@ -2,20 +2,15 @@ package com.example.filmesfamosos.view.activities;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.graphics.PorterDuff;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.filmesfamosos.BuildConfig;
 import com.example.filmesfamosos.R;
 import com.example.filmesfamosos.databinding.ActivityMovieDetailsBinding;
 import com.example.filmesfamosos.model.Movie;
-import com.example.filmesfamosos.service.RequestType;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
@@ -35,7 +30,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ActivityMovieDetailsBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_movie_details);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
         Intent intent = getIntent();
 
         if (intent != null && intent.hasExtra(MOVIE_KEY)) {

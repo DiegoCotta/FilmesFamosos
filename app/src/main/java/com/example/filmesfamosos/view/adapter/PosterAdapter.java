@@ -1,6 +1,7 @@
 package com.example.filmesfamosos.view.adapter;
 
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,10 +38,11 @@ public class PosterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private List<Movie> movies;
     private final PosterAdapterListener adapterListener;
     private LayoutInflater layoutInflater;
+    private Context context;
 
-    public PosterAdapter(PosterAdapterListener listener, RecyclerView recyclerView) {
+    public PosterAdapter(PosterAdapterListener listener, RecyclerView recyclerView, Context context) {
         this.adapterListener = listener;
-
+        this.context = context;
         if (recyclerView.getLayoutManager() instanceof GridLayoutManager) {
 
             final GridLayoutManager gridLayoutManager = (GridLayoutManager) recyclerView
@@ -73,7 +75,8 @@ public class PosterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 public int getSpanSize(int position) {
                     if (getItemViewType(position) == VIEW_ITEM)
                         return 1;
-                    else return 2;
+                    else
+                        return PosterAdapter.this.context.getResources().getInteger(R.integer.gridSize);
                 }
             });
         }

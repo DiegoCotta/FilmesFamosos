@@ -39,23 +39,28 @@ public class MainActivity extends AppCompatActivity implements PosterAdapter.Pos
     MainViewModel viewModel;
 
     ActivityMainBinding binding;
-    boolean refresh = false;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(R.string.most_popular);
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        GridLayoutManager manager = new GridLayoutManager(this, 2);
+        GridLayoutManager manager = new GridLayoutManager(this, getResources().getInteger(R.integer.gridSize));
 
         binding.rvMoviesPoster.setLayoutManager(manager);
         binding.rvMoviesPoster.setHasFixedSize(true);
-        posterAdapter = new PosterAdapter(MainActivity.this, binding.rvMoviesPoster);
+        posterAdapter = new PosterAdapter(MainActivity.this, binding.rvMoviesPoster,this);
         binding.rvMoviesPoster.setAdapter(posterAdapter);
         setupViewModel();
         viewModel.setListener(this);
-        viewModel.loadMovies(RequestType.mostPopular);
+        if (Util.hasInternet(this)) {
+            setTitle(R.string.most_popular);
+            viewModel.loadMovies(RequestType.mostPopular);
+        } else {
+            setTitle(R.string.favorites);
+            viewModel.loadMovies(RequestType.favorite);
+        }
 
     }
 
@@ -74,7 +79,6 @@ public class MainActivity extends AppCompatActivity implements PosterAdapter.Pos
                 viewModel.loadMovies(RequestType.mostPopular);
                 break;
             case R.id.action_refresh:
-                refresh = true;
                 viewModel.loadMovies(null);
                 break;
             case R.id.action_top_rating:
@@ -99,12 +103,10 @@ public class MainActivity extends AppCompatActivity implements PosterAdapter.Pos
     @Override
     public void moveToTop() {
         binding.rvMoviesPoster.scrollToPosition(0);
-
     }
 
     @Override
     public void showError(int messageId) {
-        refresh = false;
         posterAdapter.setLoaded();
         Toast.makeText(this, messageId, Toast.LENGTH_SHORT).show();
     }
