@@ -15,7 +15,7 @@ import com.example.filmesfamosos.R;
 import com.example.filmesfamosos.databinding.ActivityMainBinding;
 import com.example.filmesfamosos.service.RequestType;
 import com.example.filmesfamosos.service.Service;
-import com.example.filmesfamosos.service.ServiceResult;
+import com.example.filmesfamosos.model.ServiceResult;
 import com.example.filmesfamosos.model.Movie;
 import com.example.filmesfamosos.utils.Util;
 import com.example.filmesfamosos.view.adapter.PosterAdapter;
@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements PosterAdapter.Pos
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle(R.string.most_popular);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         GridLayoutManager manager = new GridLayoutManager(this, 2);
 
@@ -96,40 +97,16 @@ public class MainActivity extends AppCompatActivity implements PosterAdapter.Pos
             service.callMostPopular(API_KEY, page).enqueue(new Callback<ServiceResult>() {
                 @Override
                 public void onResponse(Call<ServiceResult> call, Response<ServiceResult> response) {
-                    if (response != null && response.body() != null) {
-                        maxPages = response.body().getTotal_pages();
-                        List<Movie> movieList = null;
-                        if (numPages > 1) {
-                            posterAdapter.getMovies().remove(posterAdapter.getMovies().size() - 1);
-                            movieList = posterAdapter.getMovies();
-                        }
-
-                        if (movieList == null || numPages == 1) {
-                            movieList = new ArrayList<>();
-                            if (!refresh)
-                                binding.rvMoviesPoster.smoothScrollToPosition(0);
-                        }
-                        movieList.addAll(response.body().getMovies());
-                        posterAdapter.setMovies(movieList);
-                    }
-                    if (numPages == 1 || refresh) {
-                        refresh = false;
-                        hideProgressBar();
-                    }
+                    responseSuccess(response);
                 }
 
                 @Override
                 public void onFailure(Call<ServiceResult> call, Throwable t) {
-                    hideProgressBar();
-                    refresh = false;
-                    Toast.makeText(MainActivity.this, getString(R.string.service_error), Toast.LENGTH_SHORT).show();
-                    posterAdapter.setLoaded();
+                    responseError(call);
                 }
             });
         } else {
             showConnectionError();
-            refresh = false;
-            posterAdapter.setLoaded();
         }
     }
 
@@ -141,42 +118,17 @@ public class MainActivity extends AppCompatActivity implements PosterAdapter.Pos
             service.callMostRated(API_KEY, page).enqueue(new Callback<ServiceResult>() {
                 @Override
                 public void onResponse(Call<ServiceResult> call, Response<ServiceResult> response) {
-                    if (response != null && response.body() != null) {
-                        maxPages = response.body().getTotal_pages();
-                        List<Movie> movieList = null;
-                        if (numPages > 1) {
-                            posterAdapter.getMovies().remove(posterAdapter.getMovies().size() - 1);
-                            movieList = posterAdapter.getMovies();
-                        }
-
-                        if (movieList == null || numPages == 1) {
-                            movieList = new ArrayList<>();
-                            if (!refresh)
-                                binding.rvMoviesPoster.smoothScrollToPosition(0);
-
-                        }
-                        movieList.addAll(response.body().getMovies());
-                        posterAdapter.setMovies(movieList);
-
-                    }
-                    if (numPages == 1 || refresh) {
-                        hideProgressBar();
-                        refresh = false;
-                    }
+                    responseSuccess(response);
                 }
 
                 @Override
                 public void onFailure(Call<ServiceResult> call, Throwable t) {
-                    hideProgressBar();
-                    Toast.makeText(MainActivity.this, getString(R.string.service_error), Toast.LENGTH_SHORT).show();
-                    posterAdapter.setLoaded();
-                    refresh = false;
+                    responseError(call);
                 }
             });
         } else {
             showConnectionError();
-            refresh = false;
-            posterAdapter.setLoaded();
+
         }
     }
 
@@ -189,8 +141,41 @@ public class MainActivity extends AppCompatActivity implements PosterAdapter.Pos
     }
 
     private void showConnectionError() {
+        refresh = false;
+        posterAdapter.setLoaded();
         Toast.makeText(this, R.string.no_internet, Toast.LENGTH_SHORT).show();
     }
+
+    private void responseSuccess(Response<ServiceResult> response) {
+        if (response != null && response.body() != null) {
+            maxPages = response.body().getTotal_pages();
+            List<Movie> movieList = null;
+            if (numPages > 1) {
+                posterAdapter.getMovies().remove(posterAdapter.getMovies().size() - 1);
+                movieList = posterAdapter.getMovies();
+            }
+
+            if (movieList == null || numPages == 1) {
+                movieList = new ArrayList<>();
+                if (!refresh)
+                    binding.rvMoviesPoster.smoothScrollToPosition(0);
+            }
+            movieList.addAll(response.body().getMovies());
+            posterAdapter.setMovies(movieList);
+        }
+        if (numPages == 1 || refresh) {
+            refresh = false;
+            hideProgressBar();
+        }
+    }
+
+    private void responseError(Call<ServiceResult> call) {
+        hideProgressBar();
+        refresh = false;
+        Toast.makeText(MainActivity.this, getString(R.string.service_error), Toast.LENGTH_SHORT).show();
+        posterAdapter.setLoaded();
+    }
+
 
     @Override
     public void onClick(Movie movie) {

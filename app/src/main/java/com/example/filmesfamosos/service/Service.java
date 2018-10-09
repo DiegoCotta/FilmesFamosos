@@ -1,11 +1,13 @@
 package com.example.filmesfamosos.service;
 
 import com.example.filmesfamosos.BuildConfig;
+import com.example.filmesfamosos.model.ServiceResult;
 
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -20,6 +22,12 @@ public interface Service {
 
     @GET("movie/top_rated")
     Call<ServiceResult> callMostRated(@Query("api_key") String key, @Query("page") int page);
+
+    @GET("/movie/{id}/videos")
+    Call<ServiceResult> callVideos(@Query("api_key") String key, @Path("id") int id);
+
+    @GET("/movie/{id}/reviews")
+    Call<ServiceResult> callReviews(@Query("api_key") String key, @Path("id") int id);
 
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BuildConfig.SERVICE_URL)

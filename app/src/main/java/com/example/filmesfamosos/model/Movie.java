@@ -1,5 +1,7 @@
 package com.example.filmesfamosos.model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -11,33 +13,24 @@ import java.io.Serializable;
 /**
  * Created by diegocotta on 28/09/2018.
  */
-
+@Entity
 public class Movie implements Parcelable {
 
+    @PrimaryKey
     @SerializedName("id")
-    private
-    int id;
+    private int id;
     @SerializedName("vote_average")
-    private
-    float voteAverage;
+    private float voteAverage;
     @SerializedName("title")
-    private
-    String title;
+    private String title;
     @SerializedName("popularity")
-    private
-    String popularity;
+    private String popularity;
     @SerializedName("poster_path")
-    private
-    String posterPath;
-    @SerializedName("imgPoster")
-    private
-    Bitmap imgPoster;
+    private String posterPath;
     @SerializedName("overview")
-    private
-    String overview;
+    private String overview;
     @SerializedName("release_date")
-    private
-    String release_date;
+    private String release_date;
 
 
     public int getId() {
@@ -80,14 +73,6 @@ public class Movie implements Parcelable {
         this.posterPath = posterPath;
     }
 
-    public Bitmap getImgPoster() {
-        return imgPoster;
-    }
-
-    public void setImgPoster(Bitmap imgPoster) {
-        this.imgPoster = imgPoster;
-    }
-
     public String getOverview() {
         return overview;
     }
@@ -116,7 +101,6 @@ public class Movie implements Parcelable {
         parcel.writeString(title);
         parcel.writeString(popularity);
         parcel.writeString(posterPath);
-        parcel.writeParcelable(imgPoster, i);
         parcel.writeString(overview);
         parcel.writeString(release_date);
     }
@@ -127,7 +111,6 @@ public class Movie implements Parcelable {
         title = in.readString();
         popularity = in.readString();
         posterPath = in.readString();
-        imgPoster = in.readParcelable(Bitmap.class.getClassLoader());
         overview = in.readString();
         release_date = in.readString();
     }

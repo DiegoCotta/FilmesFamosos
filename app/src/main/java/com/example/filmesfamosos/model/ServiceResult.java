@@ -1,15 +1,14 @@
-package com.example.filmesfamosos.service;
+package com.example.filmesfamosos.model;
 
-import com.example.filmesfamosos.model.Movie;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by diegocotta on 30/09/2018.
  */
 
-public class ServiceResult {
+public class ServiceResult<T> {
     @SerializedName("page")
     private
     int page;
@@ -22,7 +21,7 @@ public class ServiceResult {
 
     @SerializedName("results")
     private
-    ArrayList<Movie> movies;
+    List<T> movies;
 
     public int getPage() {
         return page;
@@ -48,11 +47,11 @@ public class ServiceResult {
         this.total_pages = total_pages;
     }
 
-    public ArrayList<Movie> getMovies() {
+    public List<T> getMovies() {
         return movies;
     }
 
-    public void setMovies(ArrayList<Movie> movies) {
+    public void setMovies(List<T> movies) {
         this.movies = movies;
     }
 }
