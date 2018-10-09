@@ -13,7 +13,7 @@ import java.io.Serializable;
 /**
  * Created by diegocotta on 28/09/2018.
  */
-@Entity
+@Entity(tableName = "movie")
 public class Movie implements Parcelable {
 
     @PrimaryKey
@@ -32,6 +32,16 @@ public class Movie implements Parcelable {
     @SerializedName("release_date")
     private String release_date;
 
+
+    public Movie(int id, float voteAverage, String title, String popularity, String posterPath, String overview, String release_date) {
+        this.id = id;
+        this.voteAverage = voteAverage;
+        this.title = title;
+        this.popularity = popularity;
+        this.posterPath = posterPath;
+        this.overview = overview;
+        this.release_date = release_date;
+    }
 
     public int getId() {
         return id;
@@ -126,4 +136,5 @@ public class Movie implements Parcelable {
             return new Movie[size];
         }
     };
+
 }

@@ -34,6 +34,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityMovieDetailsBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_movie_details);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         Intent intent = getIntent();
 
@@ -70,6 +71,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int menuItemThatWasSelected = item.getItemId();
         switch (menuItemThatWasSelected) {
+            case android.R.id.home:
+                finish();
+                return true;
             case R.id.action_favorite:
                 if (a) {
                     item.setIcon(R.drawable.ic_heart_empty);
@@ -77,7 +81,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     item.setIcon(R.drawable.ic_heart_full);
                 }
                 a = !a;
-                break;
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by diegocotta on 08/10/2018.
  */
-@Entity
+@Entity(tableName = "review")
 public class Review implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
@@ -22,6 +22,14 @@ public class Review implements Parcelable {
     @SerializedName("content")
     private String content;
 
+    private String idMovie;
+
+    public Review(int id, String name, String content, String idMovie) {
+        this.id = id;
+        this.name = name;
+        this.content = content;
+        this.idMovie = idMovie;
+    }
 
     public String getName() {
         return name;
@@ -76,4 +84,13 @@ public class Review implements Parcelable {
             return new Review[size];
         }
     };
+
+
+    public String getIdMovie() {
+        return idMovie;
+    }
+
+    public void setIdMovie(String idMovie) {
+        this.idMovie = idMovie;
+    }
 }

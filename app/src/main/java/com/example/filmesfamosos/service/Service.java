@@ -1,7 +1,10 @@
 package com.example.filmesfamosos.service;
 
 import com.example.filmesfamosos.BuildConfig;
+import com.example.filmesfamosos.model.Movie;
+import com.example.filmesfamosos.model.Review;
 import com.example.filmesfamosos.model.ServiceResult;
+import com.example.filmesfamosos.model.Video;
 
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -18,16 +21,16 @@ public interface Service {
 
 
     @GET("movie/popular")
-    Call<ServiceResult> callMostPopular(@Query("api_key") String key, @Query("page") int page);
+    Call<ServiceResult<Movie>> callMostPopular(@Query("api_key") String key, @Query("page") int page);
 
     @GET("movie/top_rated")
-    Call<ServiceResult> callMostRated(@Query("api_key") String key, @Query("page") int page);
+    Call<ServiceResult<Movie>> callMostRated(@Query("api_key") String key, @Query("page") int page);
 
     @GET("/movie/{id}/videos")
-    Call<ServiceResult> callVideos(@Query("api_key") String key, @Path("id") int id);
+    Call<ServiceResult<Video>> callVideos(@Query("api_key") String key, @Path("id") int id);
 
     @GET("/movie/{id}/reviews")
-    Call<ServiceResult> callReviews(@Query("api_key") String key, @Path("id") int id);
+    Call<ServiceResult<Review>> callReviews(@Query("api_key") String key, @Path("id") int id);
 
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BuildConfig.SERVICE_URL)

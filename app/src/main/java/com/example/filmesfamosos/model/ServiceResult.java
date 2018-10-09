@@ -10,18 +10,14 @@ import java.util.List;
 
 public class ServiceResult<T> {
     @SerializedName("page")
-    private
-    int page;
+    private int page;
     @SerializedName("total_results")
-    private
-    int total_results;
+    private int total_results;
     @SerializedName("total_pages")
-    private
-    int total_pages;
+    private int total_pages;
 
     @SerializedName("results")
-    private
-    List<T> movies;
+    private List<T> results;
 
     public int getPage() {
         return page;
@@ -47,11 +43,11 @@ public class ServiceResult<T> {
         this.total_pages = total_pages;
     }
 
-    public List<T> getMovies() {
-        return movies;
+    public List<T> getResults() {
+        return results;
     }
 
-    public void setMovies(List<T> movies) {
-        this.movies = movies;
+    public void setResults(List<T> results) {
+        this.results = results;
     }
 }

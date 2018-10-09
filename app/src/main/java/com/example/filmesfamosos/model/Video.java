@@ -11,7 +11,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by diegocotta on 08/10/2018.
  */
 
-@Entity
+@Entity(tableName = "video")
 public class Video implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
@@ -24,8 +24,17 @@ public class Video implements Parcelable {
     private String name;
 
     @SerializedName("site")
-
     private String site;
+
+    private int idMovie;
+
+    public Video(int id, String key, String name, String site, int idMovie) {
+        this.id = id;
+        this.key = key;
+        this.name = name;
+        this.site = site;
+        this.idMovie = idMovie;
+    }
 
     public String getKey() {
         return key;
@@ -81,5 +90,21 @@ public class Video implements Parcelable {
         dest.writeString(key);
         dest.writeString(name);
         dest.writeString(site);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getIdMovie() {
+        return idMovie;
+    }
+
+    public void setIdMovie(int idMovie) {
+        this.idMovie = idMovie;
     }
 }
