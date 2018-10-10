@@ -36,7 +36,7 @@ public class ServiceVideoResult implements Parcelable {
         this.videos = videos;
     }
 
-    protected ServiceVideoResult(Parcel in) {
+    private ServiceVideoResult(Parcel in) {
         id = in.readInt();
         videos = in.createTypedArrayList(Video.CREATOR);
     }

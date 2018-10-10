@@ -2,7 +2,6 @@ package com.example.filmesfamosos.view.activities;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
@@ -38,7 +37,7 @@ import java.util.List;
 public class MovieDetailsActivity extends AppCompatActivity implements MovieDetailsViewModel.MovieDetailsListener, VideoAdapter.VideoListener {
 
 
-    public static final String base_image_url = BuildConfig.BASE_IMAGE_URL;
+    private static final String base_image_url = BuildConfig.BASE_IMAGE_URL;
     public static final String MOVIE_KEY = "movie_key";
     private MovieDetailsViewModel viewModel;
     private Movie movie;

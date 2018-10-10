@@ -28,9 +28,9 @@ public class MainActivity extends AppCompatActivity implements PosterAdapter.Pos
 
     private PosterAdapter posterAdapter;
 
-    MainViewModel viewModel;
+    private MainViewModel viewModel;
 
-    ActivityMainBinding binding;
+    private ActivityMainBinding binding;
 
 
     @Override

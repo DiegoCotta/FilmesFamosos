@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="progressSize">45dp</dimen>
+    <dimen name="mediumMargin">16dp</dimen>
+    <dimen name="defaultMargin">8dp</dimen>
+    <dimen name="titleTextSize">20sp</dimen>
+    <dimen name="defaultTextSize">16sp</dimen>
+    <dimen name="smallMargin">4dp</dimen>
+</resources>

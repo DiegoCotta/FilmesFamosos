@@ -16,10 +16,8 @@ import com.example.filmesfamosos.model.ServiceVideoResult;
 import com.example.filmesfamosos.model.Video;
 import com.example.filmesfamosos.service.Service;
 import com.example.filmesfamosos.utils.AppExecutors;
-import com.example.filmesfamosos.utils.Util;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
@@ -39,7 +37,7 @@ public class MovieDetailsViewModel extends AndroidViewModel {
     private LiveData<Movie> favoriteMovie;
     private MovieDetailsListener listener;
 
-    AppDatabase database;
+    private final AppDatabase database;
 
     public MovieDetailsViewModel(@NonNull Application application) {
 

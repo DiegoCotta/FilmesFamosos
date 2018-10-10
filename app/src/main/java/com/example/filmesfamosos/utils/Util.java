@@ -14,13 +14,7 @@ public class Util {
         ConnectivityManager conMgr = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo i = conMgr.getActiveNetworkInfo();
-        if (i == null)
-            return false;
-        if (!i.isConnected())
-            return false;
-        if (!i.isAvailable())
-            return false;
-        return true;
+        return i != null && i.isConnected() && i.isAvailable();
 
     }
 }

@@ -12,15 +12,15 @@
             android:id="@+id/tv_reviewer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="@dimen/smallMargin"
             tools:text="fasdfafsd" />
 
         <TextView
             android:id="@+id/tv_review"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:textColor="#000"
+            android:layout_marginBottom="@dimen/defaultMargin"
+            android:textColor="@color/black"
             tools:text="fasdfafsd asdf asdhgf adhsf ahsdkjfhl askjdhf jkasdhf jkasdhf jkahsdflk jhasdkljf askjdhf lkajsdhf kljashdf kljashdf ljkhasdfkj ahsdkljf hasldkjh aljksdhfk jlasdhfjk sadfhjk asdjlkf asdjkf alshldks" />
 
     </LinearLayout>

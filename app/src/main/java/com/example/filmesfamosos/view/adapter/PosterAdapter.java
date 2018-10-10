@@ -16,7 +16,6 @@ import com.example.filmesfamosos.databinding.ItemMoviePosterBinding;
 import com.example.filmesfamosos.model.Movie;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,20 +24,19 @@ import java.util.List;
 //Reference Load More https://medium.com/@programmerasi/how-to-implement-load-more-in-recyclerview-3c6358297f4
 public class PosterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public static final String base_image_url = BuildConfig.BASE_IMAGE_URL;
+    private static final String base_image_url = BuildConfig.BASE_IMAGE_URL;
 
     private final int VIEW_ITEM = 1;
-    private final int VIEW_PROG = 0;
 
 
-    private int visibleThreshold = 5;
+    private final int visibleThreshold = 5;
     private int lastVisibleItem, totalItemCount;
     private boolean loading;
 
     private List<Movie> movies;
     private final PosterAdapterListener adapterListener;
     private LayoutInflater layoutInflater;
-    private Context context;
+    private final Context context;
 
     public PosterAdapter(PosterAdapterListener listener, RecyclerView recyclerView, Context context) {
         this.adapterListener = listener;
@@ -113,6 +111,7 @@ public class PosterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public int getItemViewType(int position) {
+        int VIEW_PROG = 0;
         return getMovies().get(position) != null ? VIEW_ITEM : VIEW_PROG;
     }
 
@@ -153,7 +152,7 @@ public class PosterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public class PosterViewHolder extends RecyclerView.ViewHolder {
 
-        ItemMoviePosterBinding binding;
+        final ItemMoviePosterBinding binding;
 
 
         public PosterViewHolder(ItemMoviePosterBinding binding) {
@@ -171,7 +170,7 @@ public class PosterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public static class ProgressViewHolder extends RecyclerView.ViewHolder {
 
-        ItemLoadingBinding binding;
+        final ItemLoadingBinding binding;
 
         public ProgressViewHolder(ItemLoadingBinding binding) {
             super(binding.getRoot());

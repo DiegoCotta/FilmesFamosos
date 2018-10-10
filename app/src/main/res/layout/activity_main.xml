@@ -16,12 +16,12 @@
             android:id="@+id/progressBar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#33000000"
+            android:background="@color/loadBackgroundColor"
             android:visibility="gone">
 
             <ProgressBar
-                android:layout_width="45dp"
-                android:layout_height="45dp"
+                android:layout_width="@dimen/progressSize"
+                android:layout_height="@dimen/progressSize"
                 android:layout_gravity="center" />
         </FrameLayout>
     </merge>

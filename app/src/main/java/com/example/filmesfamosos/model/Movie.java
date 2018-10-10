@@ -2,13 +2,10 @@ package com.example.filmesfamosos.model;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
-import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
-
-import java.io.Serializable;
 
 /**
  * Created by diegocotta on 28/09/2018.

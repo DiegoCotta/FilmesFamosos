@@ -10,7 +10,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="8dp"
+            android:padding="@dimen/defaultMargin"
             tools:context="com.example.filmesfamosos.view.activities.MovieDetailsActivity">
 
             <LinearLayout
@@ -21,7 +21,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp">
+                    android:layout_marginTop="@dimen/mediumMargin">
 
                     <ImageView
                         android:id="@+id/iv_Poster"
@@ -37,9 +37,9 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/iv_Poster"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="8dp"
-                        android:textColor="#000"
-                        android:textSize="16sp"
+                        android:layout_marginTop="@dimen/defaultMargin"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/defaultTextSize"
                         tools:text="(2004)" />
                 </RelativeLayout>
 
@@ -59,70 +59,70 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginLeft="@dimen/defaultMargin"
+                        android:layout_marginStart="@dimen/defaultMargin"
+                        android:layout_marginTop="@dimen/defaultMargin"
                         android:text="@string/rating"
-                        android:textColor="#000"
-                        android:textSize="20sp" />
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/titleTextSize" />
 
                     <TextView
                         android:id="@+id/tv_rating"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:textColor="#000"
-                        android:textSize="20sp"
+                        android:layout_marginLeft="@dimen/defaultMargin"
+                        android:layout_marginStart="@dimen/defaultMargin"
+                        android:layout_marginTop="@dimen/defaultMargin"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/titleTextSize"
                         tools:text="4,8" />
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginTop="8dp"
-                    android:background="#000" />
+                    android:layout_marginTop="@dimen/defaultMargin"
+                    android:background="@color/black" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="@dimen/defaultMargin"
+                    android:layout_marginStart="@dimen/defaultMargin"
+                    android:layout_marginTop="@dimen/defaultMargin"
                     android:text="@string/resume"
-                    android:textColor="#000"
-                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/titleTextSize"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tv_resume"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:textColor="#000"
-                    android:textSize="16sp"
+                    android:layout_marginLeft="@dimen/defaultMargin"
+                    android:layout_marginStart="@dimen/defaultMargin"
+                    android:layout_marginTop="@dimen/defaultMargin"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/defaultTextSize"
                     tools:text="Title" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginTop="8dp"
-                    android:background="#000" />
+                    android:layout_marginTop="@dimen/defaultMargin"
+                    android:background="@color/black" />
 
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:text="Videos"
-                    android:textColor="#000"
-                    android:textSize="20sp"
+                    android:layout_marginBottom="@dimen/defaultMargin"
+                    android:layout_marginLeft="@dimen/defaultMargin"
+                    android:layout_marginStart="@dimen/defaultMargin"
+                    android:layout_marginTop="@dimen/defaultMargin"
+                    android:text="@string/trailer"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/titleTextSize"
                     android:textStyle="bold" />
 
                 <android.support.v7.widget.RecyclerView
@@ -133,19 +133,19 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginTop="8dp"
-                    android:background="#000" />
+                    android:layout_marginTop="@dimen/defaultMargin"
+                    android:background="@color/black" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:text="Review"
-                    android:textColor="#000"
-                    android:textSize="20sp"
+                    android:layout_marginBottom="@dimen/defaultMargin"
+                    android:layout_marginLeft="@dimen/defaultMargin"
+                    android:layout_marginStart="@dimen/defaultMargin"
+                    android:layout_marginTop="@dimen/defaultMargin"
+                    android:text="@string/review"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/titleTextSize"
                     android:textStyle="bold" />
 
                 <android.support.v7.widget.RecyclerView
@@ -162,13 +162,13 @@
             android:id="@+id/progressBar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#33000000"
+            android:background="@color/loadBackgroundColor"
             android:clickable="false"
             android:visibility="gone">
 
             <ProgressBar
-                android:layout_width="45dp"
-                android:layout_height="45dp"
+                android:layout_width="@dimen/progressSize"
+                android:layout_height="@dimen/progressSize"
                 android:layout_gravity="center" />
         </FrameLayout>
     </FrameLayout>

@@ -6,11 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.filmesfamosos.BuildConfig;
 import com.example.filmesfamosos.R;
-import com.example.filmesfamosos.databinding.ItemReviewBinding;
 import com.example.filmesfamosos.databinding.ItemVideoBinding;
-import com.example.filmesfamosos.model.Review;
 import com.example.filmesfamosos.model.Video;
 import com.squareup.picasso.Picasso;
 
@@ -23,8 +20,8 @@ import java.util.List;
 public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHolder> {
 
     private List<Video> videos;
-    VideoListener listener;
-    public static final String base_image_url = "https://img.youtube.com/vi/%s/0.jpg";
+    private final VideoListener listener;
+    private static final String base_image_url = "https://img.youtube.com/vi/%s/0.jpg";
 
     public VideoAdapter(VideoListener listener) {
         this.listener = listener;
@@ -38,12 +35,12 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
     }
 
     @Override
-    public void onBindViewHolder(VideoViewHolder holder, final int position) {
+    public void onBindViewHolder(final VideoViewHolder holder, final int position) {
         holder.bind(position);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onVideoClick(videos.get(position).getKey());
+                listener.onVideoClick(videos.get(holder.getAdapterPosition()).getKey());
             }
         });
     }
@@ -67,7 +64,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
 
     public class VideoViewHolder extends RecyclerView.ViewHolder {
 
-        ItemVideoBinding binding;
+        final ItemVideoBinding binding;
 
         public VideoViewHolder(ItemVideoBinding binding) {
             super(binding.getRoot());

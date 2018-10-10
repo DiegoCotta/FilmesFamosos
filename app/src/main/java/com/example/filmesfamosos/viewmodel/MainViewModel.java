@@ -32,14 +32,14 @@ import retrofit2.Response;
 
 public class MainViewModel extends AndroidViewModel implements LifecycleOwner {
 
-    private Service service;
+    private final Service service;
     private static final String API_KEY = BuildConfig.API_KEY;
-    MutableLiveData<List<Movie>> movies;
+    private MutableLiveData<List<Movie>> movies;
     private int numPages = 1, maxPages;
-    private LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
+    private final LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
 
     private RequestType lastRequest;
-    MainListener listener;
+    private MainListener listener;
 
     public MainViewModel(Application application) {
         super(application);
@@ -110,7 +110,7 @@ public class MainViewModel extends AndroidViewModel implements LifecycleOwner {
             service.callMostPopular(API_KEY, page).enqueue(new Callback<ServiceResult<Movie>>() {
                 @Override
                 public void onResponse(Call<ServiceResult<Movie>> call, Response<ServiceResult<Movie>> response) {
-                    if (response != null && response.body() != null && lastRequest == RequestType.mostPopular) {
+                    if (response.body() != null && response.body().getResults()  != null && lastRequest == RequestType.mostPopular) {
                         maxPages = response.body().getTotal_pages();
                         List<Movie> movieList = null;
                         if (numPages > 1) {
@@ -151,7 +151,7 @@ public class MainViewModel extends AndroidViewModel implements LifecycleOwner {
             service.callMostRated(API_KEY, page).enqueue(new Callback<ServiceResult<Movie>>() {
                 @Override
                 public void onResponse(Call<ServiceResult<Movie>> call, Response<ServiceResult<Movie>> response) {
-                    if (response != null && response.body() != null && lastRequest == RequestType.topRated) {
+                    if (response.body() != null && response.body().getResults()  != null && lastRequest == RequestType.topRated) {
                         maxPages = response.body().getTotal_pages();
                         List<Movie> movieList = null;
                         if (numPages > 1) {
@@ -213,7 +213,7 @@ public class MainViewModel extends AndroidViewModel implements LifecycleOwner {
         void setScreenTitle(int title);
     }
 
-    public void startListening() {
+    private void startListening() {
         mLifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_START);
     }
 
