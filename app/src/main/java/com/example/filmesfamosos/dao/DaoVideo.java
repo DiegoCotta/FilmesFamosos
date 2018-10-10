@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 
 import com.example.filmesfamosos.model.Movie;
@@ -19,11 +20,11 @@ import java.util.List;
 public interface DaoVideo {
 
     @Query("SELECT * FROM video WHERE idMovie = :idMovie ORDER BY id")
-    LiveData<List<Video>> getMovies(int idMovie);
+    LiveData<List<Video>> getVideos(int idMovie);
 
-    @Insert
-    void insertMovie(Movie review);
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertVideo(List<Video> video);
 
-    @Delete
-    void deleteMovie(Movie review);
+    @Query("DELETE FROM video WHERE idMovie = :idMovie")
+    void deleteVideos(int idMovie);
 }

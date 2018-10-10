@@ -8,29 +8,20 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.filmesfamosos.BuildConfig;
 import com.example.filmesfamosos.R;
 import com.example.filmesfamosos.databinding.ActivityMainBinding;
 import com.example.filmesfamosos.service.RequestType;
-import com.example.filmesfamosos.service.Service;
-import com.example.filmesfamosos.model.ServiceResult;
 import com.example.filmesfamosos.model.Movie;
 import com.example.filmesfamosos.utils.Util;
 import com.example.filmesfamosos.view.adapter.PosterAdapter;
 import com.example.filmesfamosos.viewmodel.MainViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements PosterAdapter.PosterAdapterListener, MainViewModel.MainListener {
 
@@ -50,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements PosterAdapter.Pos
 
         binding.rvMoviesPoster.setLayoutManager(manager);
         binding.rvMoviesPoster.setHasFixedSize(true);
-        posterAdapter = new PosterAdapter(MainActivity.this, binding.rvMoviesPoster,this);
+        posterAdapter = new PosterAdapter(MainActivity.this, binding.rvMoviesPoster, this);
         binding.rvMoviesPoster.setAdapter(posterAdapter);
         setupViewModel();
         viewModel.setListener(this);
@@ -75,20 +66,22 @@ public class MainActivity extends AppCompatActivity implements PosterAdapter.Pos
         int menuItemThatWasSelected = item.getItemId();
         switch (menuItemThatWasSelected) {
             case R.id.action_most_popular:
-                setTitle(R.string.most_popular);
                 viewModel.loadMovies(RequestType.mostPopular);
                 break;
             case R.id.action_refresh:
                 viewModel.loadMovies(null);
                 break;
             case R.id.action_top_rating:
-                setTitle(R.string.top_rating);
                 viewModel.loadMovies(RequestType.topRated);
+                break;
+            case R.id.favorites:
+                viewModel.loadMovies(RequestType.favorite);
                 break;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
 
     @Override
     public void showProgressBar() {
@@ -106,8 +99,14 @@ public class MainActivity extends AppCompatActivity implements PosterAdapter.Pos
     }
 
     @Override
+    public void setScreenTitle(int title) {
+        setTitle(title);
+    }
+
+    @Override
     public void showError(int messageId) {
         posterAdapter.setLoaded();
+        hideProgressBar();
         Toast.makeText(this, messageId, Toast.LENGTH_SHORT).show();
     }
 

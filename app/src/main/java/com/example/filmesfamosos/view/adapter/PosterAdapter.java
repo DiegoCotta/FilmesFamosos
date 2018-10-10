@@ -62,7 +62,7 @@ public class PosterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                                     && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
                                 // End has been reached
                                 // Do something
-                                if (adapterListener != null) {
+                                if (adapterListener != null && movies != null && movies.size() > 5) {
                                     adapterListener.onLoadMore();
                                 }
                                 loading = true;

@@ -21,10 +21,10 @@ public interface DaoMovie {
     @Query("SELECT * FROM movie ORDER BY id")
     LiveData<List<Movie>> getMovies();
 
-    @Query("SELECT * FROM movie WHERE id =:id")
+    @Query("SELECT * FROM movie WHERE id = :id ORDER BY id")
     LiveData<Movie> getMovie(int id);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertMovie(Movie movie);
 
     @Delete

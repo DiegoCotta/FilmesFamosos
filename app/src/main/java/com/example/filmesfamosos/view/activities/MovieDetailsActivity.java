@@ -1,7 +1,11 @@
 package com.example.filmesfamosos.view.activities;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,6 +15,7 @@ import com.example.filmesfamosos.BuildConfig;
 import com.example.filmesfamosos.R;
 import com.example.filmesfamosos.databinding.ActivityMovieDetailsBinding;
 import com.example.filmesfamosos.model.Movie;
+import com.example.filmesfamosos.viewmodel.MovieDetailsViewModel;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
@@ -22,8 +27,11 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
 
     public static final String base_image_url = BuildConfig.BASE_IMAGE_URL;
-    boolean a = false;
     public static final String MOVIE_KEY = "movie_key";
+    private MovieDetailsViewModel viewModel;
+    private Movie movie;
+    private Menu mOptionsMenu;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +41,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         if (intent != null && intent.hasExtra(MOVIE_KEY)) {
-            Movie movie = intent.getParcelableExtra(MOVIE_KEY);
+            movie = intent.getParcelableExtra(MOVIE_KEY);
             setTitle(movie.getTitle());
             Picasso.get().load(base_image_url + movie.getPosterPath()).into(binding.ivPoster);
 
@@ -52,12 +60,28 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+        setupViewModel();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        viewModel.loadInfo(movie.getId());
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.detail, menu);
-
+        mOptionsMenu = menu;
+        viewModel.getFavoriteMovie().observe(this, new Observer<Movie>() {
+            @Override
+            public void onChanged(@Nullable Movie movie) {
+                if (movie != null)
+                    mOptionsMenu.getItem(0).setIcon(R.drawable.ic_heart_full);
+                else
+                    mOptionsMenu.getItem(0).setIcon(R.drawable.ic_heart_empty);
+            }
+        });
         return true;
     }
 
@@ -69,18 +93,19 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.action_favorite:
-                if (a) {
-                    item.setIcon(R.drawable.ic_heart_empty);
+                if (viewModel.getFavoriteMovie().getValue() != null) {
+                    viewModel.removeFavorite(movie);
                 } else {
-                    item.setIcon(R.drawable.ic_heart_full);
+                    viewModel.saveFavorite(movie);
                 }
-                a = !a;
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-
+    private void setupViewModel() {
+        viewModel = ViewModelProviders.of(this).get(MovieDetailsViewModel.class);
+    }
 
 }

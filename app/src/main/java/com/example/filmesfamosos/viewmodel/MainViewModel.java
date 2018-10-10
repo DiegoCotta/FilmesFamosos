@@ -2,7 +2,13 @@ package com.example.filmesfamosos.viewmodel;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Observer;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.example.filmesfamosos.BuildConfig;
 import com.example.filmesfamosos.R;
@@ -24,17 +30,20 @@ import retrofit2.Response;
  * Created by diegocotta on 09/10/2018.
  */
 
-public class MainViewModel extends AndroidViewModel {
+public class MainViewModel extends AndroidViewModel implements LifecycleOwner {
 
     private Service service;
     private static final String API_KEY = BuildConfig.API_KEY;
     MutableLiveData<List<Movie>> movies;
     private int numPages = 1, maxPages;
+    private LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
+
     private RequestType lastRequest;
     MainListener listener;
 
     public MainViewModel(Application application) {
         super(application);
+        startListening();
         movies = new MutableLiveData<>();
         service = Service.retrofit.create(Service.class);
     }
@@ -79,7 +88,16 @@ public class MainViewModel extends AndroidViewModel {
 
     private void callFavorite() {
         AppDatabase database = AppDatabase.getInstance(this.getApplication());
-        movies.setValue(database.movieDao().getMovies().getValue());
+        lastRequest = RequestType.favorite;
+        listener.showProgressBar();
+        database.movieDao().getMovies().observe(this, new Observer<List<Movie>>() {
+            @Override
+            public void onChanged(@Nullable List<Movie> movieList) {
+                movies.setValue(movieList);
+                listener.setScreenTitle(R.string.favorites);
+                listener.hideProgressBar();
+            }
+        });
 
     }
 
@@ -112,15 +130,16 @@ public class MainViewModel extends AndroidViewModel {
                     if (numPages == 1 || refresh) {
                         listener.hideProgressBar();
                     }
+                    listener.setScreenTitle(R.string.top_rating);
                 }
 
                 @Override
                 public void onFailure(Call<ServiceResult<Movie>> call, Throwable t) {
-                    listener.showError(R.string.no_internet);
+                    listener.showError(R.string.service_error);
                 }
             });
         } else {
-            listener.showError(R.string.service_error);
+            listener.showError(R.string.no_internet);
         }
     }
 
@@ -153,15 +172,16 @@ public class MainViewModel extends AndroidViewModel {
                     if (numPages == 1 || refresh) {
                         listener.hideProgressBar();
                     }
+                    listener.setScreenTitle(R.string.most_popular);
                 }
 
                 @Override
                 public void onFailure(Call<ServiceResult<Movie>> call, Throwable t) {
-                    listener.showError(R.string.no_internet);
+                    listener.showError(R.string.service_error);
                 }
             });
         } else {
-            listener.showError(R.string.service_error);
+            listener.showError(R.string.no_internet);
 
         }
     }
@@ -175,6 +195,12 @@ public class MainViewModel extends AndroidViewModel {
         this.movies = movies;
     }
 
+    @NonNull
+    @Override
+    public Lifecycle getLifecycle() {
+        return mLifecycleRegistry;
+    }
+
     public interface MainListener {
         void showError(int message);
 
@@ -184,6 +210,11 @@ public class MainViewModel extends AndroidViewModel {
 
         void moveToTop();
 
+        void setScreenTitle(int title);
+    }
+
+    public void startListening() {
+        mLifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_START);
     }
 
     public MainListener getListener() {

@@ -6,6 +6,8 @@ import com.example.filmesfamosos.model.Review;
 import com.example.filmesfamosos.model.ServiceResult;
 import com.example.filmesfamosos.model.Video;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -27,10 +29,10 @@ public interface Service {
     Call<ServiceResult<Movie>> callMostRated(@Query("api_key") String key, @Query("page") int page);
 
     @GET("/movie/{id}/videos")
-    Call<ServiceResult<Video>> callVideos(@Query("api_key") String key, @Path("id") int id);
+    Call<ServiceResult<Video>> callVideos(@Path("id") int id, @Query("api_key") String key);
 
     @GET("/movie/{id}/reviews")
-    Call<ServiceResult<Review>> callReviews(@Query("api_key") String key, @Path("id") int id);
+    Call<ServiceResult<Review>> callReviews(@Path("id") int id, @Query("api_key") String key);
 
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BuildConfig.SERVICE_URL)
