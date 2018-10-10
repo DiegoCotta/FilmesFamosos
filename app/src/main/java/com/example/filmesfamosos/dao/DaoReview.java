@@ -9,6 +9,7 @@ import android.arch.persistence.room.Query;
 
 import com.example.filmesfamosos.model.Review;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,7 +22,7 @@ public interface DaoReview {
     LiveData<List<Review>> getReviews(int idMovie);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertReview(List<Review> review);
+    void insertReview(ArrayList<Review> review);
 
     @Query("DELETE FROM review WHERE idMovie = :idMovie")
     void deleteReviews(int idMovie);

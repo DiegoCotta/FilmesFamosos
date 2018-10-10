@@ -14,10 +14,13 @@ import com.example.filmesfamosos.dao.AppDatabase;
 import com.example.filmesfamosos.model.Movie;
 import com.example.filmesfamosos.model.Review;
 import com.example.filmesfamosos.model.ServiceResult;
+import com.example.filmesfamosos.model.ServiceVideoResult;
 import com.example.filmesfamosos.model.Video;
 import com.example.filmesfamosos.service.Service;
 import com.example.filmesfamosos.utils.AppExecutors;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
@@ -51,22 +54,32 @@ public class MovieDetailsViewModel extends AndroidViewModel {
 
 
     public void loadInfo(final int idMovie) {
-        service.callVideos(idMovie, API_KEY).enqueue(new Callback<ServiceResult<Video>>() {
+        service.callVideos(idMovie, API_KEY).enqueue(new Callback<ServiceVideoResult>() {
             @Override
-            public void onResponse(Call<ServiceResult<Video>> call, Response<ServiceResult<Video>> response) {
-//                videos.setValue(response.body().getResults());
+            public void onResponse(Call<ServiceVideoResult> call, Response<ServiceVideoResult> response) {
+                if (response.body().getMovies() != null)
+                    for (Video v : response.body().getMovies()) {
+                        v.setIdMovie(idMovie);
+                    }
+                videos.setValue(response.body().getMovies());
             }
 
             @Override
-            public void onFailure(Call<ServiceResult<Video>> call, Throwable t) {
-
+            public void onFailure(Call<ServiceVideoResult> call, Throwable t) {
+                t.getMessage();
             }
         });
 
         service.callReviews(idMovie, API_KEY).enqueue(new Callback<ServiceResult<Review>>() {
             @Override
             public void onResponse(Call<ServiceResult<Review>> call, Response<ServiceResult<Review>> response) {
-//                reviews.setValue(response.body().getResults());
+                if (response.body().getResults() != null) {
+                    for (Review r : response.body().getResults()) {
+                        r.setIdMovie(idMovie);
+
+                    }
+                }
+                reviews.setValue(response.body().getResults());
             }
 
             @Override
@@ -75,7 +88,6 @@ public class MovieDetailsViewModel extends AndroidViewModel {
             }
         });
         favoriteMovie = database.movieDao().getMovie(idMovie);
-//        favoriteMovie.setValue(database.movieDao().getMovie(idMovie).getValue());
 
     }
 
@@ -85,15 +97,15 @@ public class MovieDetailsViewModel extends AndroidViewModel {
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                database.movieDao().insertMovie(movie);
-//                database.reviewDao().insertReview(reviews.getValue());
-//                database.videoDao().insertVideo(videos.getValue());
-                AppExecutors.getInstance().mainThread().execute(new Runnable() {
-                    @Override
-                    public void run() {
-//                        favoriteMovie.setValue(movie);
-                    }
-                });
+                try {
+                    database.beginTransaction();
+                    database.movieDao().insertMovie(movie);
+                    database.reviewDao().insertReview(new ArrayList<>(reviews.getValue()));
+                    database.videoDao().insertVideo(new ArrayList<>(videos.getValue()));
+                    database.setTransactionSuccessful();
+                } finally {
+                    database.endTransaction();
+                }
 
 
             }
@@ -107,16 +119,16 @@ public class MovieDetailsViewModel extends AndroidViewModel {
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                database.movieDao().deleteMovie(movie);
-//                database.reviewDao().deleteReviews(movie.getId());
-//                database.movieDao().deleteMovie(movie);
-                AppExecutors.getInstance().mainThread().execute(new Runnable() {
-                    @Override
-                    public void run() {
-//                        favoriteMovie.setValue(null);
-                    }
-                });
+                try {
+                    database.beginTransaction();
 
+                    database.movieDao().deleteMovie(movie);
+                    database.videoDao().deleteVideos(movie.getId());
+                    database.reviewDao().deleteReviews(movie.getId());
+                    database.setTransactionSuccessful();
+                } finally {
+                    database.endTransaction();
+                }
             }
         });
 

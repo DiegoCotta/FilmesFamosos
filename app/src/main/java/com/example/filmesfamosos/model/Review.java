@@ -22,9 +22,9 @@ public class Review implements Parcelable {
     @SerializedName("content")
     private String content;
 
-    private String idMovie;
+    private int idMovie;
 
-    public Review(int id, String name, String content, String idMovie) {
+    public Review(int id, String name, String content, int idMovie) {
         this.id = id;
         this.name = name;
         this.content = content;
@@ -86,11 +86,11 @@ public class Review implements Parcelable {
     };
 
 
-    public String getIdMovie() {
+    public int getIdMovie() {
         return idMovie;
     }
 
-    public void setIdMovie(String idMovie) {
+    public void setIdMovie(int idMovie) {
         this.idMovie = idMovie;
     }
 }

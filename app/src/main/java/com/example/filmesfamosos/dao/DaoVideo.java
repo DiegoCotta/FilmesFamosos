@@ -10,6 +10,7 @@ import android.arch.persistence.room.Query;
 import com.example.filmesfamosos.model.Movie;
 import com.example.filmesfamosos.model.Video;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,12 +20,13 @@ import java.util.List;
 @Dao
 public interface DaoVideo {
 
-    @Query("SELECT * FROM video WHERE idMovie = :idMovie ORDER BY id")
+    @Query("SELECT * FROM video WHERE idMovie = :idMovie ORDER BY idVideo")
     LiveData<List<Video>> getVideos(int idMovie);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertVideo(List<Video> video);
+    void insertVideo(ArrayList<Video> video);
 
     @Query("DELETE FROM video WHERE idMovie = :idMovie")
     void deleteVideos(int idMovie);
+
 }

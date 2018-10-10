@@ -4,10 +4,15 @@ import com.example.filmesfamosos.BuildConfig;
 import com.example.filmesfamosos.model.Movie;
 import com.example.filmesfamosos.model.Review;
 import com.example.filmesfamosos.model.ServiceResult;
+import com.example.filmesfamosos.model.ServiceVideoResult;
 import com.example.filmesfamosos.model.Video;
+import com.facebook.stetho.okhttp3.StethoInterceptor;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.List;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -28,15 +33,21 @@ public interface Service {
     @GET("movie/top_rated")
     Call<ServiceResult<Movie>> callMostRated(@Query("api_key") String key, @Query("page") int page);
 
-    @GET("/movie/{id}/videos")
-    Call<ServiceResult<Video>> callVideos(@Path("id") int id, @Query("api_key") String key);
+    @GET("movie/{id}/videos")
+    Call<ServiceVideoResult> callVideos(@Path("id") int id, @Query("api_key") String key);
 
-    @GET("/movie/{id}/reviews")
+    @GET("movie/{id}/reviews")
     Call<ServiceResult<Review>> callReviews(@Path("id") int id, @Query("api_key") String key);
+
+    OkHttpClient okHttp = new OkHttpClient.Builder()
+            .addNetworkInterceptor(new StethoInterceptor())
+            .build();
+
 
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BuildConfig.SERVICE_URL)
             .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttp)
             .build();
 
 
