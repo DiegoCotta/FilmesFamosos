@@ -2,14 +2,12 @@ package com.example.filmesfamosos.viewmodel;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Observer;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.example.filmesfamosos.BuildConfig;
+import com.example.filmesfamosos.R;
 import com.example.filmesfamosos.dao.AppDatabase;
 import com.example.filmesfamosos.model.Movie;
 import com.example.filmesfamosos.model.Review;
@@ -18,6 +16,7 @@ import com.example.filmesfamosos.model.ServiceVideoResult;
 import com.example.filmesfamosos.model.Video;
 import com.example.filmesfamosos.service.Service;
 import com.example.filmesfamosos.utils.AppExecutors;
+import com.example.filmesfamosos.utils.Util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,9 +34,10 @@ public class MovieDetailsViewModel extends AndroidViewModel {
 
     private static final String API_KEY = BuildConfig.API_KEY;
     private final Service service;
-    MutableLiveData<List<Video>> videos;
-    MutableLiveData<List<Review>> reviews;
-    LiveData<Movie> favoriteMovie;
+    private MutableLiveData<List<Video>> videos;
+    private MutableLiveData<List<Review>> reviews;
+    private LiveData<Movie> favoriteMovie;
+    private MovieDetailsListener listener;
 
     AppDatabase database;
 
@@ -50,23 +50,36 @@ public class MovieDetailsViewModel extends AndroidViewModel {
         service = Service.retrofit.create(Service.class);
         database = AppDatabase.getInstance(this.getApplication());
 
+
+    }
+
+    public AppDatabase getDatabase() {
+        return database;
     }
 
 
     public void loadInfo(final int idMovie) {
+        listener.showProgressBar();
         service.callVideos(idMovie, API_KEY).enqueue(new Callback<ServiceVideoResult>() {
             @Override
             public void onResponse(Call<ServiceVideoResult> call, Response<ServiceVideoResult> response) {
                 if (response.body().getMovies() != null)
-                    for (Video v : response.body().getMovies()) {
-                        v.setIdMovie(idMovie);
+                    for (int i = 0; i < response.body().getMovies().size(); i++) {
+                        if (response.body().getMovies().get(i).getSite().toLowerCase().contains("youtube"))
+                            response.body().getMovies().get(i).setIdMovie(idMovie);
+                        else {
+                            response.body().getMovies().remove(i--);
+                        }
                     }
                 videos.setValue(response.body().getMovies());
+                if (reviews.getValue() != null) {
+                    listener.hideProgressBar();
+                }
             }
 
             @Override
             public void onFailure(Call<ServiceVideoResult> call, Throwable t) {
-                t.getMessage();
+                listener.showError(R.string.service_error);
             }
         });
 
@@ -80,17 +93,22 @@ public class MovieDetailsViewModel extends AndroidViewModel {
                     }
                 }
                 reviews.setValue(response.body().getResults());
+                if (videos.getValue() != null) {
+                    listener.hideProgressBar();
+                }
             }
 
             @Override
             public void onFailure(Call<ServiceResult<Review>> call, Throwable t) {
-
+                listener.showError(R.string.service_error);
             }
         });
-        favoriteMovie = database.movieDao().getMovie(idMovie);
 
     }
 
+    public void isFavorite(int idMovie){
+        favoriteMovie = database.movieDao().getMovie(idMovie);
+    }
 
     public void saveFavorite(final Movie movie) {
 
@@ -134,6 +152,14 @@ public class MovieDetailsViewModel extends AndroidViewModel {
 
     }
 
+    public MovieDetailsListener getListener() {
+        return listener;
+    }
+
+    public void setListener(MovieDetailsListener listener) {
+        this.listener = listener;
+    }
+
     public LiveData<Movie> getFavoriteMovie() {
         return favoriteMovie;
     }
@@ -156,5 +182,14 @@ public class MovieDetailsViewModel extends AndroidViewModel {
 
     public void setReviews(MutableLiveData<List<Review>> reviews) {
         this.reviews = reviews;
+    }
+
+    public interface MovieDetailsListener {
+        void showError(int message);
+
+        void showProgressBar();
+
+        void hideProgressBar();
+
     }
 }

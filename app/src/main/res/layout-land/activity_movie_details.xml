@@ -125,14 +125,18 @@
                 android:background="#000" />
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="Review" />
+                android:text="Trailer"
+                android:textColor="#000"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-            <RelativeLayout
-                android:id="@+id/rv_Review"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_videos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -143,16 +147,22 @@
                 android:background="#000" />
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="Videos" />
+                android:text="Review"
+                android:textColor="#000"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-            <RelativeLayout
-                android:id="@+id/rv_videos"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_Review"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
+
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>

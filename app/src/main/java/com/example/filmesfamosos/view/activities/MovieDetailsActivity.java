@@ -2,19 +2,30 @@ package com.example.filmesfamosos.view.activities;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Toast;
 
 import com.example.filmesfamosos.BuildConfig;
 import com.example.filmesfamosos.R;
 import com.example.filmesfamosos.databinding.ActivityMovieDetailsBinding;
 import com.example.filmesfamosos.model.Movie;
+import com.example.filmesfamosos.model.Review;
 import com.example.filmesfamosos.model.Video;
+import com.example.filmesfamosos.utils.Util;
+import com.example.filmesfamosos.view.adapter.ReviewAdapter;
+import com.example.filmesfamosos.view.adapter.VideoAdapter;
 import com.example.filmesfamosos.viewmodel.MovieDetailsViewModel;
 import com.squareup.picasso.Picasso;
 
@@ -24,7 +35,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class MovieDetailsActivity extends AppCompatActivity {
+public class MovieDetailsActivity extends AppCompatActivity implements MovieDetailsViewModel.MovieDetailsListener, VideoAdapter.VideoListener {
 
 
     public static final String base_image_url = BuildConfig.BASE_IMAGE_URL;
@@ -32,12 +43,15 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private MovieDetailsViewModel viewModel;
     private Movie movie;
     private Menu mOptionsMenu;
+    private ActivityMovieDetailsBinding binding;
+    private ReviewAdapter reviewAdapter;
+    private VideoAdapter videoAdapter;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityMovieDetailsBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_movie_details);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_movie_details);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         Intent intent = getIntent();
 
@@ -61,13 +75,54 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+        LinearLayoutManager layoutManagerHorizontal
+                = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager layoutManagerVertical
+                = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        binding.rvReview.setLayoutManager(layoutManagerVertical);
+        binding.rvReview.setHasFixedSize(true);
+        binding.rvVideos.setLayoutManager(layoutManagerHorizontal);
+        binding.rvVideos.setHasFixedSize(true);
+        reviewAdapter = new ReviewAdapter();
+        videoAdapter = new VideoAdapter(this);
+        binding.rvReview.setAdapter(reviewAdapter);
+        binding.rvVideos.setAdapter(videoAdapter);
+        binding.progressBar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
         setupViewModel();
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        viewModel.loadInfo(movie.getId());
+        if (!Util.hasInternet(this)) {
+            showProgressBar();
+            viewModel.getDatabase().videoDao().getVideos(movie.getId()).observe(this, new Observer<List<Video>>() {
+                @Override
+                public void onChanged(@Nullable List<Video> videos) {
+                    videoAdapter.setVideos(videos);
+                    if (reviewAdapter.getItemCount() > 0) {
+                        hideProgressBar();
+                    }
+                }
+            });
+            viewModel.getDatabase().reviewDao().getReviews(movie.getId()).observe(this, new Observer<List<Review>>() {
+                @Override
+                public void onChanged(@Nullable List<Review> reviews) {
+                    reviewAdapter.setReviews(reviews);
+                    if (videoAdapter.getItemCount() > 0)
+                        hideProgressBar();
+                }
+            });
+        } else {
+            viewModel.loadInfo(movie.getId());
+        }
+        viewModel.isFavorite(movie.getId());
     }
 
     @Override
@@ -107,12 +162,51 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
     private void setupViewModel() {
         viewModel = ViewModelProviders.of(this).get(MovieDetailsViewModel.class);
+        viewModel.setListener(this);
         viewModel.getVideos().observe(this, new Observer<List<Video>>() {
             @Override
             public void onChanged(@Nullable List<Video> videos) {
-                videos.size();
+                videoAdapter.setVideos(videos);
             }
         });
+        viewModel.getReviews().observe(this, new Observer<List<Review>>() {
+            @Override
+            public void onChanged(@Nullable List<Review> reviews) {
+                reviewAdapter.setReviews(reviews);
+            }
+        });
+
+
+    }
+
+
+    @Override
+    public void showError(int message) {
+        hideProgressBar();
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showProgressBar() {
+        binding.progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgressBar() {
+        binding.progressBar.setVisibility(View.GONE);
+
+    }
+
+    @Override
+    public void onVideoClick(String key) {
+        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + key));
+        Intent webIntent = new Intent(Intent.ACTION_VIEW,
+                Uri.parse("http://www.youtube.com/watch?v=" + key));
+        PackageManager packageManager = getPackageManager();
+        if (appIntent.resolveActivity(packageManager) != null)
+            startActivity(appIntent);
+        else
+            startActivity(webIntent);
     }
 
 }

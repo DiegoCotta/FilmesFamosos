@@ -110,7 +110,7 @@ public class MainViewModel extends AndroidViewModel implements LifecycleOwner {
             service.callMostPopular(API_KEY, page).enqueue(new Callback<ServiceResult<Movie>>() {
                 @Override
                 public void onResponse(Call<ServiceResult<Movie>> call, Response<ServiceResult<Movie>> response) {
-                    if (response != null && response.body() != null) {
+                    if (response != null && response.body() != null && lastRequest == RequestType.mostPopular) {
                         maxPages = response.body().getTotal_pages();
                         List<Movie> movieList = null;
                         if (numPages > 1) {
@@ -151,7 +151,7 @@ public class MainViewModel extends AndroidViewModel implements LifecycleOwner {
             service.callMostRated(API_KEY, page).enqueue(new Callback<ServiceResult<Movie>>() {
                 @Override
                 public void onResponse(Call<ServiceResult<Movie>> call, Response<ServiceResult<Movie>> response) {
-                    if (response != null && response.body() != null) {
+                    if (response != null && response.body() != null && lastRequest == RequestType.topRated) {
                         maxPages = response.body().getTotal_pages();
                         List<Movie> movieList = null;
                         if (numPages > 1) {

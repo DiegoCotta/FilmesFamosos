@@ -14,9 +14,12 @@ import com.google.gson.annotations.SerializedName;
 public class Review implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private int idReview;
 
-    @SerializedName("name")
+    @SerializedName("id")
+    private String externalId;
+
+    @SerializedName("author")
     private String name;
 
     @SerializedName("content")
@@ -24,12 +27,32 @@ public class Review implements Parcelable {
 
     private int idMovie;
 
-    public Review(int id, String name, String content, int idMovie) {
-        this.id = id;
+    public Review(String externalId, String name, String content, int idMovie) {
+        this.externalId = externalId;
         this.name = name;
         this.content = content;
         this.idMovie = idMovie;
     }
+
+    protected Review(Parcel in) {
+        idReview = in.readInt();
+        externalId = in.readString();
+        name = in.readString();
+        content = in.readString();
+        idMovie = in.readInt();
+    }
+
+    public static final Creator<Review> CREATOR = new Creator<Review>() {
+        @Override
+        public Review createFromParcel(Parcel in) {
+            return new Review(in);
+        }
+
+        @Override
+        public Review[] newArray(int size) {
+            return new Review[size];
+        }
+    };
 
     public String getName() {
         return name;
@@ -47,12 +70,20 @@ public class Review implements Parcelable {
         this.content = content;
     }
 
-    public int getId() {
-        return id;
+    public int getIdReview() {
+        return idReview;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdReview(int idReview) {
+        this.idReview = idReview;
+    }
+
+    public String getExternalId() {
+        return externalId;
+    }
+
+    public void setExternalId(String externalId) {
+        this.externalId = externalId;
     }
 
     @Override
@@ -62,28 +93,12 @@ public class Review implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
+        dest.writeInt(idReview);
+        dest.writeString(externalId);
         dest.writeString(name);
         dest.writeString(content);
+        dest.writeInt(idMovie);
     }
-
-    protected Review(Parcel in) {
-        id = in.readInt();
-        name = in.readString();
-        content = in.readString();
-    }
-
-    public static final Creator<Review> CREATOR = new Creator<Review>() {
-        @Override
-        public Review createFromParcel(Parcel in) {
-            return new Review(in);
-        }
-
-        @Override
-        public Review[] newArray(int size) {
-            return new Review[size];
-        }
-    };
 
 
     public int getIdMovie() {

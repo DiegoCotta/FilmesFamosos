@@ -18,7 +18,7 @@ import java.util.List;
 
 @Dao
 public interface DaoReview {
-    @Query("SELECT * FROM review WHERE idMovie = :idMovie ORDER BY id")
+    @Query("SELECT * FROM review WHERE idMovie = :idMovie ORDER BY idReview")
     LiveData<List<Review>> getReviews(int idMovie);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

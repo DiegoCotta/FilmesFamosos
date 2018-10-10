@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
@@ -52,7 +53,12 @@ public class MainActivity extends AppCompatActivity implements PosterAdapter.Pos
             setTitle(R.string.favorites);
             viewModel.loadMovies(RequestType.favorite);
         }
-
+        binding.progressBar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
     }
 
     @Override
